@@ -41,4 +41,12 @@ export class UsersService {
       where: { id },
     });
   }
+
+  async findOneByResetToken(token: string) {
+    return this.usersRepository.findOne({
+      where: {
+        resetToken: token,
+      },
+    });
+  }
 }

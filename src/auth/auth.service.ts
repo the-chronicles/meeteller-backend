@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common';
@@ -8,6 +9,11 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { v4 as uuidv4 } from 'uuid';
+
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
@@ -95,6 +101,55 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
 
       user,
+    };
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const user = await this.usersService.findByEmail(forgotPasswordDto.email);
+
+    if (!user) {
+      return {
+        message: 'If account exists, reset email sent',
+      };
+    }
+
+    const resetToken = uuidv4();
+
+    const expiry = new Date();
+
+    expiry.setHours(expiry.getHours() + 1);
+
+    await this.usersService.updateUser(user.id, {
+      resetToken,
+      resetTokenExpiry: expiry,
+    });
+
+    return {
+      message: 'Reset token generated',
+
+      resetToken,
+    };
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const user = await this.usersService.findOneByResetToken(
+      resetPasswordDto.token,
+    );
+
+    if (!user || !user.resetTokenExpiry || user.resetTokenExpiry < new Date()) {
+      throw new BadRequestException('Invalid or expired token');
+    }
+
+    const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+
+    await this.usersService.updateUser(user.id, {
+      password: hashedPassword,
+      resetToken: null,
+      resetTokenExpiry: null,
+    });
+
+    return {
+      message: 'Password reset successful',
     };
   }
 }

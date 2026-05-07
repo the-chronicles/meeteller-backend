@@ -30,12 +30,12 @@ export class User {
   @Column({
     nullable: true,
   })
-  resetToken!: string;
+  resetToken!: string | null;
 
   @Column({
     nullable: true,
   })
-  resetTokenExpiry!: Date;
+  resetTokenExpiry!: Date | null;
 
   @Column({ default: 'user' })
   role!: string;
