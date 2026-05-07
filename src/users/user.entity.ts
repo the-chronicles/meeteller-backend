@@ -13,6 +13,11 @@ export class User {
   @Column({ nullable: true, unique: true })
   email!: string;
 
+  @Column({
+    nullable: true,
+  })
+  password!: string;
+
   @Column({ nullable: true })
   name!: string;
 
@@ -21,6 +26,16 @@ export class User {
 
   @Column({ nullable: true, unique: true })
   microsoftId!: string;
+
+  @Column({
+    nullable: true,
+  })
+  resetToken!: string;
+
+  @Column({
+    nullable: true,
+  })
+  resetTokenExpiry!: Date;
 
   @Column({ default: 'user' })
   role!: string;

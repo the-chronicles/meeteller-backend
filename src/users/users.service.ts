@@ -21,4 +21,24 @@ export class UsersService {
     const user = this.usersRepository.create(data);
     return this.usersRepository.save(user);
   }
+
+  async findByEmail(email: string) {
+    return this.usersRepository.findOne({
+      where: { email },
+    });
+  }
+
+  async createUser(data: Partial<User>) {
+    const user = this.usersRepository.create(data);
+
+    return this.usersRepository.save(user);
+  }
+
+  async updateUser(id: number, data: Partial<User>) {
+    await this.usersRepository.update(id, data);
+
+    return this.usersRepository.findOne({
+      where: { id },
+    });
+  }
 }
