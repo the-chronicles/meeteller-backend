@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -45,9 +46,11 @@ export class UsersService {
   async updateUser(id: number, data: Partial<User>) {
     await this.usersRepository.update(id, data);
 
-    return this.usersRepository.findOne({
+    const updatedUser = await this.usersRepository.findOne({
       where: { id },
     });
+
+    return sanitizeUser(updatedUser);
   }
 
   async findOneByResetToken(token: string) {
