@@ -4,12 +4,20 @@ import { Repository } from 'typeorm';
 
 import { User } from './user.entity';
 
+import { sanitizeUser } from './utils/sanitize-user';
+
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
+  async findById(id: number) {
+    return this.usersRepository.findOne({
+      where: { id },
+    });
+  }
 
   async findByGoogleId(googleId: string) {
     return this.usersRepository.findOne({

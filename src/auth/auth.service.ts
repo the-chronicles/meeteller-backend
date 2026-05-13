@@ -17,6 +17,8 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
+import { sanitizeUser } from '../users/utils/sanitize-user';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -38,14 +40,16 @@ export class AuthService {
 
     const payload = {
       sub: user.id,
-      email: user.email,
+      // email: user.email,
     };
 
     const access_token = this.jwtService.sign(payload);
 
     return {
       access_token,
-      user,
+      // user,
+
+      user: sanitizeUser(user),
     };
   }
 
@@ -60,7 +64,7 @@ export class AuthService {
 
     const user = await this.usersService.createUser({
       email: signUpDto.email,
-      name: signUpDto.name,
+      // name: signUpDto.name,
       password: hashedPassword,
     });
 
@@ -72,7 +76,7 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
 
-      user,
+      user: sanitizeUser(user),
     };
   }
 
@@ -100,7 +104,7 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
 
-      user,
+      user: sanitizeUser(user),
     };
   }
 

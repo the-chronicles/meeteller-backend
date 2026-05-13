@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -28,11 +29,13 @@ export class User {
   microsoftId!: string;
 
   @Column({
+    type: 'text',
     nullable: true,
   })
   resetToken!: string | null;
 
   @Column({
+    type: 'timestamp',
     nullable: true,
   })
   resetTokenExpiry!: Date | null;
@@ -45,4 +48,27 @@ export class User {
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
+
+  @Column({
+    nullable: true,
+  })
+  bio!: string;
+
+  @Column({
+    nullable: true,
+  })
+  timezone!: string;
+
+  @Column({
+    default: false,
+  })
+  onboardingCompleted!: boolean;
+
+  @Column({
+    default: 'free',
+  })
+  subscriptionPlan!: string;
 }

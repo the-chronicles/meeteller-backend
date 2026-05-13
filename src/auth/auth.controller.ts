@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
@@ -23,10 +24,20 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuth() {}
 
+  // @Get('google/callback')
+  // @UseGuards(AuthGuard('google'))
+  // googleCallback(@Req() req) {
+  //   return req.user;
+  // }
+
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  googleCallback(@Req() req) {
-    return req.user;
+  googleCallback(@Req() req, @Res() res) {
+    const { access_token } = req.user;
+
+    return res.redirect(
+      `http://localhost:3000/auth/callback?token=${access_token}`,
+    );
   }
 
   @Get('me')
