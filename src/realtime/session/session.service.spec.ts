@@ -1,28 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
+import { SessionService } from './session.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { Session } from '../session.entity';
 
-describe('UsersService', () => {
-  let service: UsersService;
+describe('SessionService', () => {
+  let service: SessionService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UsersService,
+        SessionService,
         {
-          provide: getRepositoryToken(User),
+          provide: getRepositoryToken(Session),
           useValue: {
             findOne: jest.fn(),
             create: jest.fn(),
             save: jest.fn(),
-            update: jest.fn(),
           },
         },
       ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    service = module.get<SessionService>(SessionService);
   });
 
   it('should be defined', () => {

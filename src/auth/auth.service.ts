@@ -9,7 +9,7 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
@@ -117,7 +117,7 @@ export class AuthService {
       };
     }
 
-    const resetToken = uuidv4();
+    const resetToken = randomUUID();
 
     const expiry = new Date();
 

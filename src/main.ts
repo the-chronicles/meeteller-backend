@@ -12,9 +12,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+  await app.listen(process.env.PORT ?? 3001, '0.0.0.0');
 
-  console.log(`Server running on port ${process.env.PORT ?? 3000}`);
+  console.log(`Server running on port ${process.env.PORT ?? 3001}`);
 }
 
 bootstrap();

@@ -68,7 +68,30 @@ export class User {
   onboardingCompleted!: boolean;
 
   @Column({
-    default: 'free',
+    default: 'basic',
   })
   subscriptionPlan!: string;
+
+  @Column({
+    default: 'active',
+  })
+  subscriptionStatus!: string;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  subscriptionEndDate!: Date | null;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  paystackCustomerId!: string | null;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  paystackSubscriptionCode!: string | null;
 }
